@@ -33,14 +33,14 @@ export function covertRowColumnsToGrid(rowCol) {
   return grid;
 }
 
-export function populatePlayerTanks(tanksPerPerson) {
+export function populatePlayerTanks(tanksPerPerson, startPosition) {
   const tanks = [];
   let tankIndex = 0;
   while (tanksPerPerson > tankIndex) {
     const tank = new Tank({
       shape: 'default',
       strength: tankIndex + 1,
-      position: [],
+      position: startPosition,
     });
     tanks.push(tank);
     tankIndex++;

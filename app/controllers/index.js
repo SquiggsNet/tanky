@@ -26,13 +26,15 @@ export default class IndexController extends Controller {
   @tracked boardType = 'default';
   @tracked playerOne;
   @tracked playerTwo;
-  
+
   @tracked playerNameLabel;
   @tracked playerName;
-  
+
   @tracked gameStarted = true;
   @tracked isEnterPlayerInfo = false;
   @tracked isEnterPlayerTanks = false;
+
+  @tracked enterPlayerTanks = 'p1';
 
   @tracked shipIndex = 0;
 
@@ -81,75 +83,29 @@ export default class IndexController extends Controller {
   }
 
   @action
-  actionAutoName() {
-    const playerOneTanks = populatePlayerTanks(tanksPerPerson);
-    this.playerOne = new Player({
-      name: 'Mecloving',
-      type: 'p1',
-      units: playerOneTanks,
-    });
-
-    const playerTwoTanks = populatePlayerTanks(tanksPerPerson);
-    this.playerTwo = new Player({
-      name: 'Squiggs',
-      type: 'p2',
-      units: playerTwoTanks,
-    });
-    this.cancelPlayerCreation();
-    this.isEnterPlayerTanks = true;
-    this.gameStarted = true;
-  }
-
-  @action
   actionConfirmName() {
     const { saveNameDisabled, playerOne, playerTwo } = this;
     if (saveNameDisabled) {
       return;
     }
     if (!playerOne) {
-      const playerOneTanks = populatePlayerTanks(tanksPerPerson);
+      const startPosition = [4.5, -1.25];
+      const playerOneTanks = populatePlayerTanks(tanksPerPerson, startPosition);
       this.playerOne = new Player({
         name: this.playerName,
         type: 'p1',
         units: playerOneTanks,
       });
-      playerOneTanks[0].position[0] = 1;
-      playerOneTanks[0].position[1] = 1;
 
-      playerOneTanks[1].position[0] = 2;
-      playerOneTanks[1].position[1] = 2;
-
-      playerOneTanks[2].position[0] = 3;
-      playerOneTanks[2].position[1] = 1;
-
-      playerOneTanks[3].position[0] = 5;
-      playerOneTanks[3].position[1] = 1;
-
-      playerOneTanks[4].position[0] = 7;
-      playerOneTanks[4].position[1] = 2;
       this.startPlayerCreation();
     } else if (!playerTwo) {
-      const playerTwoTanks = populatePlayerTanks(tanksPerPerson);
+      const startPosition = [4.5, 10.25];
+      const playerTwoTanks = populatePlayerTanks(tanksPerPerson, startPosition);
       this.playerTwo = new Player({
         name: this.playerName,
         type: 'p2',
         units: playerTwoTanks,
       });
-
-      // playerTwoTanks[0].position[0] = 1;
-      // playerTwoTanks[0].position[1] = 10;
-
-      // playerTwoTanks[1].position[0] = 3;
-      // playerTwoTanks[1].position[1] = 9;
-
-      // playerTwoTanks[2].position[0] = 4;
-      // playerTwoTanks[2].position[1] = 9;
-
-      // playerTwoTanks[3].position[0] = 6;
-      // playerTwoTanks[3].position[1] = 10;
-
-      // playerTwoTanks[4].position[0] = 9;
-      // playerTwoTanks[4].position[1] = 10;
       this.cancelPlayerCreation();
       this.isEnterPlayerTanks = true;
       this.gameStarted = true;
@@ -158,19 +114,43 @@ export default class IndexController extends Controller {
 
   @action
   cellActionClick(rowIndex, cellIndex) {
-    const { isEnterPlayerTanks, playerOne, shipIndex } = this;
+    // TODO: handle tank selection
+    const {
+      isEnterPlayerTanks,
+      enterPlayerTanks,
+      playerOne,
+      playerTwo,
+      shipIndex,
+    } = this;
     if (!isEnterPlayerTanks) {
       return;
     }
 
-    const tank = playerOne.units[shipIndex];
+    const tank =
+      enterPlayerTanks === 'p1'
+        ? playerOne.units[shipIndex]
+        : playerTwo.units[shipIndex];
+
     if (tank) {
       tank.position.pos1 = cellIndex;
       tank.position.pos2 = rowIndex;
       this.shipIndex = shipIndex + 1;
       if (this.shipIndex >= tanksPerPerson) {
         this.shipIndex = 0;
+        if (enterPlayerTanks === 'p1') {
+          this.enterPlayerTanks = 'p2';
+        } else {
+          this.enterPlayerTanks = 'p1';
+        }
       }
     }
+  }
+
+  @action
+  actionAutoName() {
+    this.playerName = 'Mecloving';
+    this.actionConfirmName();
+    this.playerName = 'Squiggs';
+    this.actionConfirmName();
   }
 }

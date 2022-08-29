@@ -17,7 +17,9 @@ export class Tank {
     this.shape = shape;
     this.strength = strength;
     if (position?.length) {
-      this.position = new position(position[0], position[1]);
+      this.position = new Position();
+      this.position.pos1 = position[0];
+      this.position.pos2 = position[1];
     }
   }
 
