@@ -12,8 +12,9 @@
     {{#each @playerOne.units as |tank|}}
       {{#if tank.isAssignedLocation}}
         <div
-          class="tank-unit p1"
+          class="tank-unit p1 click-able"
           style="transform: translate({{tank.xLocation}}%, {{tank.yLocation}}%)"
+          {{action this.tankActionClick tank}}
         >
           {{tank.strength}}
         </div>
@@ -24,8 +25,9 @@
     {{#each @playerTwo.units as |tank|}}
       {{#if tank.isAssignedLocation}}
         <div
-          class="tank-unit p2"
+          class="tank-unit p2 click-able"
           style="transform: translate({{tank.xLocation}}%, {{tank.yLocation}}%)"
+          {{action this.tankActionClick tank}}
         >
           {{tank.strength}}
         </div>

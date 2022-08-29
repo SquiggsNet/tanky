@@ -26,4 +26,13 @@ export default class GameBoardComponent extends Component {
       cellActionClick(rowIndex, cellIndex);
     }
   }
+
+  @action
+  tankActionClick(tank) {
+    const { tankActionClick } = this.args;
+
+    if ('function' === typeof tankActionClick) {
+      tankActionClick(tank);
+    }
+  }
 }

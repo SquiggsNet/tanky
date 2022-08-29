@@ -5,6 +5,10 @@
   pointer-events: none;
 }
 
+.click-able {
+  pointer-events: auto;
+}
+
 .board-grid {
   position: relative;
 }

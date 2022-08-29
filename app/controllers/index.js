@@ -34,9 +34,7 @@ export default class IndexController extends Controller {
   @tracked isEnterPlayerInfo = false;
   @tracked isEnterPlayerTanks = false;
 
-  @tracked enterPlayerTanks = 'p1';
-
-  @tracked shipIndex = 0;
+  @tracked tankSelected;
 
   @action
   simulationStart() {
@@ -113,36 +111,24 @@ export default class IndexController extends Controller {
   }
 
   @action
+  tankActionClick(tank) {
+    if (this.tankSelected === tank) {
+      this.tankSelected = undefined;
+    } else {
+      this.tankSelected = tank;
+    }
+  }
+
+  @action
   cellActionClick(rowIndex, cellIndex) {
-    // TODO: handle tank selection
-    const {
-      isEnterPlayerTanks,
-      enterPlayerTanks,
-      playerOne,
-      playerTwo,
-      shipIndex,
-    } = this;
+    const { isEnterPlayerTanks, tankSelected } = this;
     if (!isEnterPlayerTanks) {
       return;
     }
 
-    const tank =
-      enterPlayerTanks === 'p1'
-        ? playerOne.units[shipIndex]
-        : playerTwo.units[shipIndex];
-
-    if (tank) {
-      tank.position.pos1 = cellIndex;
-      tank.position.pos2 = rowIndex;
-      this.shipIndex = shipIndex + 1;
-      if (this.shipIndex >= tanksPerPerson) {
-        this.shipIndex = 0;
-        if (enterPlayerTanks === 'p1') {
-          this.enterPlayerTanks = 'p2';
-        } else {
-          this.enterPlayerTanks = 'p1';
-        }
-      }
+    if (tankSelected) {
+      tankSelected.position.pos1 = cellIndex;
+      tankSelected.position.pos2 = rowIndex;
     }
   }
 
