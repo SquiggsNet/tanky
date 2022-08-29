@@ -40,7 +40,9 @@ export function populatePlayerTanks(tanksPerPerson, startPosition) {
     const tank = new Tank({
       shape: 'default',
       strength: tankIndex + 1,
-      position: startPosition,
+      position: startPosition
+        ? [startPosition[0] + tankIndex, startPosition[1]]
+        : [],
     });
     tanks.push(tank);
     tankIndex++;

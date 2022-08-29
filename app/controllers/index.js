@@ -89,7 +89,7 @@ export default class IndexController extends Controller {
       return;
     }
     if (!playerOne) {
-      const startPosition = [4.5, -1.25];
+      const startPosition = [2, -1.25];
       const playerOneTanks = populatePlayerTanks(tanksPerPerson, startPosition);
       this.playerOne = new Player({
         name: this.playerName,
@@ -99,7 +99,7 @@ export default class IndexController extends Controller {
 
       this.startPlayerCreation();
     } else if (!playerTwo) {
-      const startPosition = [4.5, 10.25];
+      const startPosition = [2, 10.25];
       const playerTwoTanks = populatePlayerTanks(tanksPerPerson, startPosition);
       this.playerTwo = new Player({
         name: this.playerName,
