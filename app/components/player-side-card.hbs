@@ -1,12 +1,12 @@
 <div class='flex-colomn text-center twenty'>
   {{#if @player}}
-    <div>
+    <h2>
       {{@player.name}}
-    </div>
+    </h2>
     <div>
-      <div>
+      <h3>
         {{@unitName}}s
-      </div>
+      </h3>
       <div>
         {{#each @player.units as |unit|}}
           <div class='tank'>{{unit.strength}}</div>
