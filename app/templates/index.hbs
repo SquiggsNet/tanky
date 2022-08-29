@@ -8,13 +8,15 @@
   <div class="pad-top flex space-between">
     <PlayerSideCard @player={{this.playerOne}} @unitName="Tank" />
     {{#if this.gameStarted}}
-      <GameBoard
-        @boardType={{this.boardType}}
-        @playerOne={{this.playerOne}}
-        @playerTwo={{this.playerTwo}}
-        @tankActionClick={{this.tankActionClick}}
-        @cellActionClick={{this.cellActionClick}}
-      />
+      <div class="pad-top">
+        <GameBoard
+          @boardType={{this.boardType}}
+          @playerOne={{this.playerOne}}
+          @playerTwo={{this.playerTwo}}
+          @tankActionClick={{this.tankActionClick}}
+          @cellActionClick={{this.cellActionClick}}
+        />
+      </div>
     {{/if}}
     <PlayerSideCard @player={{this.playerTwo}} @unitName="Tank"/>
   </div>
