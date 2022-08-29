@@ -1,0 +1,35 @@
+<div class="board-grid">
+  <table>
+    {{#each this.grid as |row|}}
+      <tr>
+        {{#each row as |cell|}}
+          <td class={{if (is-equal cell 1) 'land' 'water'}}></td>
+        {{/each}}
+      </tr>
+    {{/each}}
+  </table>
+  <div class="tank-grid">
+    {{#each @playerOne.units as |tank|}}
+      {{#if tank.isAssignedLocation}}
+        <div
+          class="tank-unit p1"
+          style="transform: translate({{tank.xLocation}}%, {{tank.yLocation}}%)"
+        >
+          {{tank.strength}}
+        </div>
+      {{/if}}
+    {{/each}}
+  </div>
+  <div class="tank-grid">
+    {{#each @playerTwo.units as |tank|}}
+      {{#if tank.isAssignedLocation}}
+        <div
+          class="tank-unit p2"
+          style="transform: translate({{tank.xLocation}}%, {{tank.yLocation}}%)"
+        >
+          {{tank.strength}}
+        </div>
+      {{/if}}
+    {{/each}}
+  </div>
+</div>
