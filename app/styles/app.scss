@@ -1,6 +1,10 @@
 @import "ember-modal-dialog/ember-modal-structure";
 @import "ember-modal-dialog/ember-modal-appearance";
 
+.click-through {
+  pointer-events: none;
+}
+
 .board-grid {
   position: relative;
 }
@@ -63,6 +67,7 @@ td {
   border-radius: 20%;
   font-size: 18px;
   border: 1px solid black;
+  transition: transform 1s;
 }
 
 .tank {

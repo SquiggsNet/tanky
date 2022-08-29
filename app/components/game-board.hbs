@@ -1,14 +1,14 @@
 <div class="board-grid">
   <table>
-    {{#each this.grid as |row|}}
+    {{#each this.grid as |row rowI|}}
       <tr>
-        {{#each row as |cell|}}
-          <td class={{if (is-equal cell 1) 'land' 'water'}}></td>
+        {{#each row as |cell cellI|}}
+          <td class={{if (is-equal cell 1) 'land' 'water'}} {{action this.cellActionClick rowI cellI}}></td>
         {{/each}}
       </tr>
     {{/each}}
   </table>
-  <div class="tank-grid">
+  <div class="tank-grid click-through">
     {{#each @playerOne.units as |tank|}}
       {{#if tank.isAssignedLocation}}
         <div
@@ -20,7 +20,7 @@
       {{/if}}
     {{/each}}
   </div>
-  <div class="tank-grid">
+  <div class="tank-grid click-through">
     {{#each @playerTwo.units as |tank|}}
       {{#if tank.isAssignedLocation}}
         <div

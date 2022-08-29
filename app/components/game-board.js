@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import {
   defaultGrid,
   advancedGrid,
@@ -15,5 +16,14 @@ export default class GameBoardComponent extends Component {
       grid = advancedGrid;
     }
     return grid;
+  }
+
+  @action
+  cellActionClick(rowIndex, cellIndex) {
+    const { cellActionClick } = this.args;
+
+    if ('function' === typeof cellActionClick) {
+      cellActionClick(rowIndex, cellIndex);
+    }
   }
 }

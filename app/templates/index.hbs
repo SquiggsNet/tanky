@@ -12,6 +12,7 @@
         @boardType={{this.boardType}}
         @playerOne={{this.playerOne}}
         @playerTwo={{this.playerTwo}}
+        @cellActionClick={{this.cellActionClick}}
       />
     {{/if}}
     <PlayerSideCard @player={{this.playerTwo}} @unitName="Tank"/>
@@ -33,6 +34,7 @@
         {{on "input" this.updateName}}
       />
       <button type="button" disabled={{this.saveNameDisabled}} {{action this.actionConfirmName}}>Confirm</button>
+      <button type="button" {{action this.actionAutoName}}>Auto-Gen Names</button>
     </div>
   {{/modal-dialog}}
 {{/if}}

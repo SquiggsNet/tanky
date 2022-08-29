@@ -2,21 +2,39 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { populatePlayerTanks } from './../utils/game-board';
-import { Player, Tank } from './../utils/tankObjects';
+import { Player } from './../utils/tankObjects';
 
 const tanksPerPerson = 6;
 
-
+// const gameState = [
+//   {
+//     label: 'start-game',
+//     actions: [
+//       'name-p1',
+//       'name-p2',
+//       'ship-assignment-p1',
+//       'ship-assignment-p2',
+//       'finish',
+//     ],
+//   },
+//   {
+//     label: 'turn-succession',
+//   },
+// ];
 
 export default class IndexController extends Controller {
   @tracked boardType = 'default';
-  @tracked gameStarted = true;
   @tracked playerOne;
   @tracked playerTwo;
-
-  @tracked isEnterPlayerInfo = false;
+  
   @tracked playerNameLabel;
   @tracked playerName;
+  
+  @tracked gameStarted = true;
+  @tracked isEnterPlayerInfo = false;
+  @tracked isEnterPlayerTanks = false;
+
+  @tracked shipIndex = 0;
 
   @action
   simulationStart() {
@@ -63,6 +81,26 @@ export default class IndexController extends Controller {
   }
 
   @action
+  actionAutoName() {
+    const playerOneTanks = populatePlayerTanks(tanksPerPerson);
+    this.playerOne = new Player({
+      name: 'Mecloving',
+      type: 'p1',
+      units: playerOneTanks,
+    });
+
+    const playerTwoTanks = populatePlayerTanks(tanksPerPerson);
+    this.playerTwo = new Player({
+      name: 'Squiggs',
+      type: 'p2',
+      units: playerTwoTanks,
+    });
+    this.cancelPlayerCreation();
+    this.isEnterPlayerTanks = true;
+    this.gameStarted = true;
+  }
+
+  @action
   actionConfirmName() {
     const { saveNameDisabled, playerOne, playerTwo } = this;
     if (saveNameDisabled) {
@@ -75,20 +113,20 @@ export default class IndexController extends Controller {
         type: 'p1',
         units: playerOneTanks,
       });
-      playerOneTanks[0].position[0] = 2;
-      playerOneTanks[0].position[1] = 3;
+      playerOneTanks[0].position[0] = 1;
+      playerOneTanks[0].position[1] = 1;
 
-      playerOneTanks[1].position[0] = 3;
-      playerOneTanks[1].position[1] = 6;
+      playerOneTanks[1].position[0] = 2;
+      playerOneTanks[1].position[1] = 2;
 
       playerOneTanks[2].position[0] = 3;
-      playerOneTanks[2].position[1] = 9;
+      playerOneTanks[2].position[1] = 1;
 
-      playerOneTanks[3].position[0] = 2;
-      playerOneTanks[3].position[1] = 6;
+      playerOneTanks[3].position[0] = 5;
+      playerOneTanks[3].position[1] = 1;
 
-      playerOneTanks[4].position[0] = 1;
-      playerOneTanks[4].position[1] = 1;
+      playerOneTanks[4].position[0] = 7;
+      playerOneTanks[4].position[1] = 2;
       this.startPlayerCreation();
     } else if (!playerTwo) {
       const playerTwoTanks = populatePlayerTanks(tanksPerPerson);
@@ -98,22 +136,41 @@ export default class IndexController extends Controller {
         units: playerTwoTanks,
       });
 
-      playerTwoTanks[0].position[0] = 10;
-      playerTwoTanks[0].position[1] = 1;
+      // playerTwoTanks[0].position[0] = 1;
+      // playerTwoTanks[0].position[1] = 10;
 
-      playerTwoTanks[1].position[0] = 9;
-      playerTwoTanks[1].position[1] = 3;
+      // playerTwoTanks[1].position[0] = 3;
+      // playerTwoTanks[1].position[1] = 9;
 
-      playerTwoTanks[2].position[0] = 8;
-      playerTwoTanks[2].position[1] = 5;
+      // playerTwoTanks[2].position[0] = 4;
+      // playerTwoTanks[2].position[1] = 9;
 
-      playerTwoTanks[3].position[0] = 10;
-      playerTwoTanks[3].position[1] = 10;
+      // playerTwoTanks[3].position[0] = 6;
+      // playerTwoTanks[3].position[1] = 10;
 
-      playerTwoTanks[4].position[0] = 9;
-      playerTwoTanks[4].position[1] = 6;
+      // playerTwoTanks[4].position[0] = 9;
+      // playerTwoTanks[4].position[1] = 10;
       this.cancelPlayerCreation();
+      this.isEnterPlayerTanks = true;
       this.gameStarted = true;
+    }
+  }
+
+  @action
+  cellActionClick(rowIndex, cellIndex) {
+    const { isEnterPlayerTanks, playerOne, shipIndex } = this;
+    if (!isEnterPlayerTanks) {
+      return;
+    }
+
+    const tank = playerOne.units[shipIndex];
+    if (tank) {
+      tank.position.pos1 = cellIndex;
+      tank.position.pos2 = rowIndex;
+      this.shipIndex = shipIndex + 1;
+      if (this.shipIndex >= tanksPerPerson) {
+        this.shipIndex = 0;
+      }
     }
   }
 }

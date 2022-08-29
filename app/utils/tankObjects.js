@@ -3,40 +3,53 @@ import { htmlSafe } from '@ember/string';
 
 const columns = 10;
 
+export class Position {
+  @tracked pos1;
+  @tracked pos2;
+}
+
 export class Tank {
   @tracked shape = 'default';
   @tracked strength;
-  @tracked position = [];
+  @tracked position = new Position();
 
   constructor({ shape, strength, position }) {
     this.shape = shape;
     this.strength = strength;
-    this.position = position;
+    if (position?.length) {
+      this.position = new position(position[0], position[1]);
+    }
+  }
+
+  get hasX() {
+    return this.position?.pos1 || this.position?.pos1 === 0;
+  }
+
+  get hasY() {
+    return this.position?.pos2 || this.position?.pos2 === 0;
   }
 
   get isAssignedLocation() {
-    const { position } = this;
-    return position && position.length === 2;
+    const { hasX, hasY } = this;
+    return hasX && hasY;
   }
 
-  get xLocation () {
-    const { position } = this;
-    const xPosition = position && position[0];
-    if (!xPosition) {
+  get xLocation() {
+    const { hasX, position } = this;
+    if (!hasX) {
       return undefined;
     }
 
-    return (xPosition - 1) * 100;
+    return position?.pos1 * 100;
   }
 
-  get yLocation () {
-    const { position } = this;
-    const yPosition = position && position[1];
-    if (!yPosition) {
+  get yLocation() {
+    const { hasY, position } = this;
+    if (!hasY) {
       return undefined;
     }
 
-    return (yPosition - 1) * 100;
+    return position?.pos2 * 100;
   }
 }
 
