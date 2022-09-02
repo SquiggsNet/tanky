@@ -3,37 +3,35 @@ import { htmlSafe } from '@ember/string';
 
 const columns = 10;
 
-export class Position {
-  @tracked pos1;
-  @tracked pos2;
-}
-
 export class Tank {
   @tracked shape = 'default';
   @tracked strength;
-  @tracked position = new Position();
+  @tracked position;
 
   constructor({ shape, strength, position }) {
     this.shape = shape;
     this.strength = strength;
     if (position?.length) {
-      this.position = new Position();
-      this.position.pos1 = position[0];
-      this.position.pos2 = position[1];
+      this.position = { pos1: position[0], pos2: position[1]};
     }
   }
 
   get hasX() {
-    return this.position?.pos1 || this.position?.pos1 === 0;
+    return !!(this.position?.pos1 || this.position?.pos1 === 0);
   }
 
   get hasY() {
-    return this.position?.pos2 || this.position?.pos2 === 0;
+    return !!(this.position?.pos2 || this.position?.pos2 === 0);
   }
 
   get isAssignedLocation() {
     const { hasX, hasY } = this;
     return hasX && hasY;
+  }
+
+  get validCoordinates () {
+    const { isAssignedLocation, hasX, hasY } = this;
+    return isAssignedLocation && (10 > this.position?.pos1 && this.position?.pos1 >= 0) && (10 > this.position?.pos2 && this.position?.pos2 >= 0);
   }
 
   get xLocation() {

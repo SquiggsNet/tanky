@@ -1,33 +1,37 @@
-import { Tank } from "./tankObjects";
+import { Tank } from './tankObjects';
+import { tracked } from '@glimmer/tracking';
+import { Position } from './tankObjects'
+
+class Cell {
+  @tracked canUse = false;
+  @tracked position;
+
+  constructor({ canUse, pos1, pos2 }) {
+    this.canUse = canUse;
+    this.position = { pos1, pos2 };
+  }
+}
 
 export const defaultGrid = [10, 10];
-export const advancedGrid = [
-  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-];
 
 export function covertRowColumnsToGrid(rowCol) {
-  let rowCount = rowCol[0];
-  let columnCount = rowCol[1];
+  const rowCount = rowCol[0];
+  const columnCount = rowCol[1];
 
   const grid = [];
-  while (rowCount > 0) {
+  let rowIndex = 0;
+  while (rowCount > rowIndex) {
     const row = [];
-    while (columnCount > 0) {
-      row.push(1);
-      columnCount--;
+    let colIndex = 0;
+    while (columnCount > colIndex) {
+      row.push(new Cell({
+        pos1: colIndex,
+        pos2: rowIndex
+      }));
+      colIndex++;
     }
-    columnCount = rowCol[1];
     grid.push(row);
-    rowCount--;
+    rowIndex++
   }
 
   return grid;
