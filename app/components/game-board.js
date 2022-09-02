@@ -39,7 +39,11 @@ export default class GameBoardComponent extends Component {
             t.position.pos2 === unitSelected.position.pos2 + 1
         );
         if (down) {
-          validTiles.push(down);
+          const canDown = unitSelected?.player?.type === 'p1' ||
+          (unitSelected?.player?.type === 'p2' && down.position === unitSelected.turnPositions[unitSelected.turnPositions.length - 2]);
+          if (canDown) {
+            validTiles.push(down);
+          }
         }
         const up = tiles.find(
           (t) =>
@@ -47,7 +51,11 @@ export default class GameBoardComponent extends Component {
             t.position.pos2 === unitSelected.position.pos2 - 1
         );
         if (up) {
-          validTiles.push(up);
+          const canUp = unitSelected?.player?.type === 'p2' ||
+          (unitSelected?.player?.type === 'p1' && up.position === unitSelected.turnPositions[unitSelected.turnPositions.length - 2]);
+          if (canUp) {
+            validTiles.push(up);
+          }
         }
         const right = tiles.find(
           (t) =>
