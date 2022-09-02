@@ -1,4 +1,4 @@
-<div class='flex-colomn text-center twenty'>
+<div class='flex-colomn text-center twenty player-card'>
   {{#if @player}}
     <h2>
       {{@player.name}}
@@ -12,6 +12,10 @@
           <div class='tank'>{{unit.strength}}</div>
         {{/each}}
       </div>
+    </div>
+    <div>
+      <h3>Movements</h3>
+      <p>{{@player.totalTurnMoves}}</p>
     </div>
   {{/if}}
 </div>

@@ -1,11 +1,9 @@
 import { tracked } from '@glimmer/tracking';
-import { htmlSafe } from '@ember/string';
-
-const columns = 10;
 
 export class Tank {
   @tracked shape = 'default';
   @tracked strength;
+  @tracked turnPositions = [];
   @tracked position;
 
   constructor({ shape, strength, position }) {
@@ -51,6 +49,14 @@ export class Tank {
 
     return position?.pos2 * 100;
   }
+  get tilesMovedCount() {
+    const { turnPositions } = this
+    if (!turnPositions) {
+      return;
+    }
+
+    return turnPositions.length - 1;
+  }
 }
 
 export class Player {
@@ -62,5 +68,13 @@ export class Player {
     this.name = name;
     this.type = type;
     this.units = units;
+  }
+
+  get totalTurnMoves() {
+    const { units } = this;
+    if (!units) {
+      return 0;
+    }
+    return units.reduce((partialSum, a) => partialSum + a.tilesMovedCount, 0)
   }
 }
