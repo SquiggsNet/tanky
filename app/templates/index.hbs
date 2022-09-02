@@ -10,11 +10,15 @@
     {{#if this.gameStarted}}
       <div class="pad-top">
         <GameBoard
+          @grid={{this.grid}}
+          @gameState={{this.gameState}}
           @boardType={{this.boardType}}
           @playerOne={{this.playerOne}}
           @playerTwo={{this.playerTwo}}
+          @tankSelected={{this.tankSelected}}
           @tankActionClick={{this.tankActionClick}}
           @cellActionClick={{this.cellActionClick}}
+          @actionButtonClick={{this.actionButtonClick}}
         />
       </div>
     {{/if}}
@@ -23,11 +27,7 @@
 </div>
 
 {{#if this.isEnterPlayerInfo}}
-  {{#modal-dialog
-    onClose=(action this.cancelPlayerCreation)
-    targetAttachment="center"
-    translucentOverlay=true
-  }}
+  <ModalDialog @onClose={{action this.cancelPlayerCreation}} @targetAttachment="center" @translucentOverlay={{true}}>
     <div>
       <label for="input-name">{{this.playerNameLabel}}</label>
       <Input
@@ -39,5 +39,5 @@
       <button type="button" disabled={{this.saveNameDisabled}} {{action this.actionConfirmName}}>Confirm</button>
       <button type="button" {{action this.actionAutoName}}>Auto-Gen Names</button>
     </div>
-  {{/modal-dialog}}
+  </ModalDialog>
 {{/if}}

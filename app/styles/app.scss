@@ -17,7 +17,11 @@ html {
 .board-grid {
   position: relative;
 }
-
+.cell {
+  &._selectable {
+    background-color: transparentize($color: green, $amount: 0.6);
+  }
+}
 .tank-grid {
   position: absolute;
   height: 100%;
@@ -101,19 +105,20 @@ td {
   width: 53px;
   height: 53px;
   margin: 2px;
-  line-height: 51px;
-  // margin-top: 0.5px;
-  // margin-left: 0.5px;
   transition: transform 1s;
   
-  // &.p1 {
-  //   color: red;
-  //   border-color: red;
-  //   background-color: Blue;
-  // }
-  // &.p2 {
-  //   color: blue;
-  //   border-color: blue;
-  //   background-color: red;
-  // }
+  &._selected {
+    background-color: red;
+  }
+  .strength-display {
+    margin-left: -80%;
+    position: absolute;
+    &.p1 {
+      color: red;
+    }
+    &.p2 {
+      color: blue;
+      margin-top: 55%;
+    }
+  }
 }

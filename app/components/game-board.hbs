@@ -3,37 +3,24 @@
     {{#each this.grid as |row rowI|}}
       <tr>
         {{#each row as |cell cellI|}}
-          <td class={{if (is-equal cell 1) 'land' 'water'}} {{action this.cellActionClick rowI cellI}}></td>
+          <td class={{class-list "cell" (if cell.canUse "_selectable")}} {{action this.cellActionClick rowI cellI}}></td>
         {{/each}}
       </tr>
     {{/each}}
   </table>
   <div class="tank-grid click-through">
-    {{#each @playerOne.units as |tank|}}
+    {{#each this.units as |tank|}}
       {{#if tank.isAssignedLocation}}
         <div
-          class="tank-unit p1 click-able"
+          class={{class-list "tank-unit click-able" tank.player.type (if (is-equal tank this.unitSelected) "_selected")}}
           style="transform: translate({{tank.xLocation}}%, {{tank.yLocation}}%)"
           {{action this.tankActionClick tank}}
         >
-          <img src="/images/tank.png" alt="Tank" class="tank-image p1">
-          {{!-- {{tank.strength}} --}}
+          <img src="/images/tank.png" alt="Tank" class={{class-list "tank-image" tank.player.type}}>
+          <span class={{class-list "strength-display" tank.player.type}}>{{tank.strength}}</span>
         </div>
       {{/if}}
     {{/each}}
   </div>
-  <div class="tank-grid click-through">
-    {{#each @playerTwo.units as |tank|}}
-      {{#if tank.isAssignedLocation}}
-        <div
-          class="tank-unit p2 click-able"
-          style="transform: translate({{tank.xLocation}}%, {{tank.yLocation}}%)"
-          {{action this.tankActionClick tank}}
-        >
-          <img src="/images/tank.png" alt="Tank" class="tank-image p2">
-          {{!-- {{tank.strength}} --}}
-        </div>
-      {{/if}}
-    {{/each}}
-  </div>
+  <button type="button" disabled={{this.actionButtonDisabled}} {{action this.actionButtonClick}}>{{this.actionButtonText}}</button>
 </div>

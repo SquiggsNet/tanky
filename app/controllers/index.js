@@ -3,6 +3,10 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { populatePlayerTanks } from './../utils/game-board';
 import { Player } from './../utils/tankObjects';
+import {
+  defaultGrid,
+  covertRowColumnsToGrid,
+} from './../utils/game-board';
 
 const tanksPerPerson = 6;
 
@@ -24,6 +28,7 @@ const tanksPerPerson = 6;
 
 export default class IndexController extends Controller {
   @tracked boardType = 'default';
+  @tracked grid;
   @tracked playerOne;
   @tracked playerTwo;
 
@@ -32,7 +37,7 @@ export default class IndexController extends Controller {
 
   @tracked gameStarted = true;
   @tracked isEnterPlayerInfo = false;
-  @tracked isEnterPlayerTanks = false;
+  @tracked gameState;
 
   @tracked tankSelected;
 
@@ -94,6 +99,9 @@ export default class IndexController extends Controller {
         type: 'p1',
         units: playerOneTanks,
       });
+      for (const tank of playerOneTanks) {
+        tank.player = this.playerOne;
+      }
 
       this.startPlayerCreation();
     } else if (!playerTwo) {
@@ -104,9 +112,13 @@ export default class IndexController extends Controller {
         type: 'p2',
         units: playerTwoTanks,
       });
+      for (const tank of playerTwoTanks) {
+        tank.player = this.playerTwo;
+      }
       this.cancelPlayerCreation();
-      this.isEnterPlayerTanks = true;
+      this.gameState = 'enter-player-tanks';
       this.gameStarted = true;
+      this.grid = covertRowColumnsToGrid(defaultGrid);
     }
   }
 
@@ -121,15 +133,24 @@ export default class IndexController extends Controller {
 
   @action
   cellActionClick(rowIndex, cellIndex) {
-    const { isEnterPlayerTanks, tankSelected } = this;
-    if (!isEnterPlayerTanks) {
+    const { gameState, tankSelected, grid } = this;
+    if (!gameState || !grid) {
       return;
     }
 
-    if (tankSelected) {
-      tankSelected.position.pos1 = cellIndex;
-      tankSelected.position.pos2 = rowIndex;
+    const canTankUpdate = this.gameState === 'enter-player-tanks' || this.gameState === 'first-round-movement';
+    if (tankSelected && canTankUpdate) {
+      const cell = grid[rowIndex][cellIndex];
+      if (cell?.canUse) {
+        tankSelected.position = cell.position;
+      }
     }
+  }
+  
+  @action
+  actionButtonClick() {
+    this.tankSelected = undefined;
+    this.gameState = 'first-round-movement';
   }
 
   @action
