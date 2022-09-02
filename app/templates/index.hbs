@@ -5,7 +5,7 @@
       <button type="button" {{action this.actionGameStart}}>Start Game</button>
     </div>
   {{/unless}}
-  <div class="pad-top flex space-between">
+  <div class="pad-top flex play-area">
     <PlayerSideCard @player={{this.playerOne}} @unitName="Tank" />
     {{#if this.gameStarted}}
       <div class="pad-top">
