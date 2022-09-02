@@ -6,12 +6,22 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Helper | is-equal', function (hooks) {
   setupRenderingTest(hooks);
 
-  // TODO: Replace this with your real tests.
-  test('it renders', async function (assert) {
+  test('it renders false', async function (assert) {
     this.set('inputValue', '1234');
+    this.set('inputValueTwo', 'gdsgg');
 
-    await render(hbs`{{is-equal this.inputValue}}`);
+    await render(hbs`{{is-equal this.inputValue this.inputValueTwo}}`);
 
-    assert.dom(this.element).hasText('1234');
+    assert.dom(this.element).hasText('false');
   });
+
+  test('it renders true', async function (assert) {
+    this.set('inputValue', '1234');
+    this.set('inputValueTwo', '1234');
+
+    await render(hbs`{{is-equal this.inputValue this.inputValueTwo}}`);
+
+    assert.dom(this.element).hasText('true');
+  });
+
 });
