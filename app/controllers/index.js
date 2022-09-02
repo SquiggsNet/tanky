@@ -120,7 +120,8 @@ export default class IndexController extends Controller {
     }
 
     const updateMovements = this.gameState === 'first-round-movement';
-    const canTankUpdate = this.gameState === 'enter-player-tanks' || updateMovements;
+    const canTankUpdate =
+      this.gameState === 'enter-player-tanks' || updateMovements;
 
     if (tankSelected && canTankUpdate) {
       const cell = grid[rowIndex][cellIndex];

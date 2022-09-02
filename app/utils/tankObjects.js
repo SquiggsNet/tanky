@@ -10,7 +10,7 @@ export class Tank {
     this.shape = shape;
     this.strength = strength;
     if (position?.length) {
-      this.position = { pos1: position[0], pos2: position[1]};
+      this.position = { pos1: position[0], pos2: position[1] };
     }
   }
 
@@ -27,7 +27,7 @@ export class Tank {
     return hasX && hasY;
   }
 
-  get validCoordinates () {
+  get validCoordinates() {
     const { isAssignedLocation } = this;
     return (
       isAssignedLocation &&

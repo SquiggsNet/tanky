@@ -32,64 +32,82 @@ export default class GameBoardComponent extends Component {
         } else if (unitSelected?.player?.type === 'p2') {
           validTiles = [...grid[grid.length - 1]];
         }
-      } else if (gameState ==='first-round-movement') {
-        const down = tiles.find((t) => t.position.pos1 === (unitSelected.position.pos1) && t.position.pos2 === unitSelected.position.pos2 + 1);
+      } else if (gameState === 'first-round-movement') {
+        const down = tiles.find(
+          (t) =>
+            t.position.pos1 === unitSelected.position.pos1 &&
+            t.position.pos2 === unitSelected.position.pos2 + 1
+        );
         if (down) {
           validTiles.push(down);
         }
-        const up = tiles.find((t) => t.position.pos1 === (unitSelected.position.pos1) && t.position.pos2 === unitSelected.position.pos2 - 1);
+        const up = tiles.find(
+          (t) =>
+            t.position.pos1 === unitSelected.position.pos1 &&
+            t.position.pos2 === unitSelected.position.pos2 - 1
+        );
         if (up) {
           validTiles.push(up);
         }
-        const right = tiles.find((t) => t.position.pos1 === (unitSelected.position.pos1 + 1) && t.position.pos2 === unitSelected.position.pos2);
+        const right = tiles.find(
+          (t) =>
+            t.position.pos1 === unitSelected.position.pos1 + 1 &&
+            t.position.pos2 === unitSelected.position.pos2
+        );
         if (right) {
           validTiles.push(right);
         }
-        const left = tiles.find((t) => t.position.pos1 === (unitSelected.position.pos1 - 1) && t.position.pos2 === unitSelected.position.pos2);
+        const left = tiles.find(
+          (t) =>
+            t.position.pos1 === unitSelected.position.pos1 - 1 &&
+            t.position.pos2 === unitSelected.position.pos2
+        );
         if (left) {
           validTiles.push(left);
         }
       }
     }
-    
-    validTiles = validTiles.filter((tile) => !uesdPositions.includes(tile.position));
-    const inValidTiles = tiles.filter((tile)=> !validTiles.includes(tile));
+
+    validTiles = validTiles.filter(
+      (tile) => !uesdPositions.includes(tile.position)
+    );
+    const inValidTiles = tiles.filter((tile) => !validTiles.includes(tile));
     for (const tile of validTiles) {
       tile.canUse = true;
     }
     for (const tile of inValidTiles) {
       tile.canUse = false;
     }
-    
+
     return grid;
   }
 
-  get units () {
+  get units() {
     const { playerOne, playerTwo } = this.args;
     let units = [];
 
     if (playerOne?.units) {
       units = [...playerOne.units];
     }
-    if(playerTwo?.units) {
+    if (playerTwo?.units) {
       units = [...units, ...playerTwo.units];
     }
 
     return units;
   }
 
-  get unitSelected () {
+  get unitSelected() {
     return this.args.tankSelected;
   }
 
-  get actionButtonDisabled () {
+  get actionButtonDisabled() {
     const { units, gameState } = this;
     let isDisabled = true;
     if (units.length) {
       if (gameState === 'enter-player-tanks') {
         isDisabled = !units.every((unit) => unit.validCoordinates);
       } else if (gameState === 'first-round-movement') {
-        isDisabled = true
+        isDisabled = true;
       }
     }
 

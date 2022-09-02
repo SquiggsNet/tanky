@@ -27,7 +27,7 @@
 </div>
 
 {{#if this.isEnterPlayerInfo}}
-  <ModalDialog @onClose={{on "click" this.cancelPlayerCreation}} @targetAttachment="center" @translucentOverlay={{true}}>
+  <ModalDialog @onClose={{this.cancelPlayerCreation}} @targetAttachment="center" @translucentOverlay={{true}}>
     <div>
       <label for="input-name">{{this.playerNameLabel}}</label>
       <Input

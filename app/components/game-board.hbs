@@ -4,7 +4,7 @@
       {{#each this.grid as |row rowI|}}
         <tr>
           {{#each row as |cell cellI|}}
-            <td class={{class-list "cell" (if cell.canUse "_selectable")}} {{on "click" this.cellActionClick rowI cellI}}></td>
+            <td type="button" class={{class-list "cell" (if cell.canUse "_selectable")}} {{on "click" (fn this.cellActionClick rowI cellI)}}></td>
           {{/each}}
         </tr>
       {{/each}}
@@ -14,9 +14,11 @@
     {{#each this.units as |tank|}}
       {{#if tank.isAssignedLocation}}
         <div
+          type="button"
           class={{class-list "tank-unit click-able" tank.player.type (if (is-equal tank this.unitSelected) "_selected")}}
-          style="transform: translate({{tank.xLocation}}%, {{tank.yLocation}}%)"
-          {{on "click" this.tankActionClick tank}}
+          {{!-- allowed when `allowDynamicStyles` is enabled  --}}
+          style={{html-safe (concat "transform: translate(" tank.xLocation "%, " tank.yLocation "%)")}}
+          {{on "click" (fn this.tankActionClick tank)}}
         >
           <img src="/images/tank.png" alt="Tank" class={{class-list "tank-image" tank.player.type}}>
           <span class={{class-list "strength-display" tank.player.type}}>{{tank.strength}}</span>

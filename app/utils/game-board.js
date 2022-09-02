@@ -24,12 +24,10 @@ export function covertRowColumnsToGrid(rowCol) {
     let colIndex = 0;
     while (columnCount > colIndex) {
       row.push(
-        new Cell(
-          {
-            pos1: colIndex,
-            pos2: rowIndex,
-          }
-        )
+        new Cell({
+          pos1: colIndex,
+          pos2: rowIndex,
+        })
       );
       colIndex++;
     }
