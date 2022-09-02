@@ -23,5 +23,4 @@ module('Integration | Helper | is-equal', function (hooks) {
 
     assert.dom(this.element).hasText('true');
   });
-
 });
