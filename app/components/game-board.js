@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 
 export default class GameBoardComponent extends Component {
   get gameState() {
@@ -37,17 +36,13 @@ export default class GameBoardComponent extends Component {
         }
       }
       else if (gameState ==='first-round-movement') {
-        if (unitSelected?.player?.type === 'p1') {
-          const down = tiles.find((t) => t.position.pos1 === (unitSelected.position.pos1) &&  t.position.pos2 === unitSelected.position.pos2 + 1);
-          if (down) {
-            validTiles.push(down);
-          }
+        const down = tiles.find((t) => t.position.pos1 === (unitSelected.position.pos1) &&  t.position.pos2 === unitSelected.position.pos2 + 1);
+        if (down) {
+          validTiles.push(down);
         }
-        else if (unitSelected?.player?.type === 'p2') {
-          const up = tiles.find((t) => t.position.pos1 === (unitSelected.position.pos1) &&  t.position.pos2 === unitSelected.position.pos2 - 1);
-          if (up) {
-            validTiles.push(up);
-          }
+        const up = tiles.find((t) => t.position.pos1 === (unitSelected.position.pos1) &&  t.position.pos2 === unitSelected.position.pos2 - 1);
+        if (up) {
+          validTiles.push(up);
         }
         const right = tiles.find((t) => t.position.pos1 === (unitSelected.position.pos1 + 1) &&  t.position.pos2 === unitSelected.position.pos2);
         if (right) {

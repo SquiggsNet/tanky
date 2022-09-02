@@ -10,22 +10,6 @@ import {
 
 const tanksPerPerson = 6;
 
-// const gameState = [
-//   {
-//     label: 'start-game',
-//     actions: [
-//       'name-p1',
-//       'name-p2',
-//       'ship-assignment-p1',
-//       'ship-assignment-p2',
-//       'finish',
-//     ],
-//   },
-//   {
-//     label: 'turn-succession',
-//   },
-// ];
-
 export default class IndexController extends Controller {
   @tracked boardType = 'default';
   @tracked grid;
@@ -138,11 +122,20 @@ export default class IndexController extends Controller {
       return;
     }
 
-    const canTankUpdate = this.gameState === 'enter-player-tanks' || this.gameState === 'first-round-movement';
+    const updateMovements = this.gameState === 'first-round-movement';
+    const canTankUpdate = this.gameState === 'enter-player-tanks' || updateMovements;
     if (tankSelected && canTankUpdate) {
       const cell = grid[rowIndex][cellIndex];
       if (cell?.canUse) {
         tankSelected.position = cell.position;
+        if (updateMovements) {
+          if (tankSelected.turnPositions.includes(cell.position)) {
+            tankSelected.turnPositions.popObject(cell.position);
+          }
+          else {
+            tankSelected.turnPositions.pushObject(cell.position);
+          }
+        }
       }
     }
   }
@@ -151,6 +144,25 @@ export default class IndexController extends Controller {
   actionButtonClick() {
     this.tankSelected = undefined;
     this.gameState = 'first-round-movement';
+    this.updateTurnStartPosition();
+  }
+
+  @action
+  updateTurnStartPosition() {
+    const { playerOne, playerTwo } = this;
+    this.assignStartPosition(playerOne.units);
+    this.assignStartPosition(playerTwo.units);
+  }
+
+  @action
+  assignStartPosition(units) {
+    if (!units) {
+      return;
+    }
+
+    for (const unit of units) {
+      unit.turnPositions.pushObject(unit.position);
+    }
   }
 
   @action
