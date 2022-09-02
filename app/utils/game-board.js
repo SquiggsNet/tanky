@@ -1,6 +1,5 @@
 import { Tank } from './tankObjects';
 import { tracked } from '@glimmer/tracking';
-import { Position } from './tankObjects'
 
 class Cell {
   @tracked canUse = false;
@@ -24,14 +23,16 @@ export function covertRowColumnsToGrid(rowCol) {
     const row = [];
     let colIndex = 0;
     while (columnCount > colIndex) {
-      row.push(new Cell({
-        pos1: colIndex,
-        pos2: rowIndex
-      }));
+      row.push(
+        new Cell({
+          pos1: colIndex,
+          pos2: rowIndex,
+        })
+      );
       colIndex++;
     }
     grid.push(row);
-    rowIndex++
+    rowIndex++;
   }
 
   return grid;

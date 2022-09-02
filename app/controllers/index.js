@@ -3,10 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { populatePlayerTanks } from './../utils/game-board';
 import { Player } from './../utils/tankObjects';
-import {
-  defaultGrid,
-  covertRowColumnsToGrid,
-} from './../utils/game-board';
+import { defaultGrid, covertRowColumnsToGrid } from './../utils/game-board';
 
 const tanksPerPerson = 6;
 
@@ -123,7 +120,9 @@ export default class IndexController extends Controller {
     }
 
     const updateMovements = this.gameState === 'first-round-movement';
-    const canTankUpdate = this.gameState === 'enter-player-tanks' || updateMovements;
+    const canTankUpdate =
+      this.gameState === 'enter-player-tanks' || updateMovements;
+
     if (tankSelected && canTankUpdate) {
       const cell = grid[rowIndex][cellIndex];
       if (cell?.canUse) {
@@ -131,15 +130,14 @@ export default class IndexController extends Controller {
         if (updateMovements) {
           if (tankSelected.turnPositions.includes(cell.position)) {
             tankSelected.turnPositions.popObject(cell.position);
-          }
-          else {
+          } else {
             tankSelected.turnPositions.pushObject(cell.position);
           }
         }
       }
     }
   }
-  
+
   @action
   actionButtonClick() {
     this.tankSelected = undefined;

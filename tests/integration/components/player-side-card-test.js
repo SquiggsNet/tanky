@@ -13,14 +13,5 @@ module('Integration | Component | player-side-card', function (hooks) {
     await render(hbs`<PlayerSideCard />`);
 
     assert.dom(this.element).hasText('');
-
-    // Template block usage:
-    await render(hbs`
-      <PlayerSideCard>
-        template block text
-      </PlayerSideCard>
-    `);
-
-    assert.dom(this.element).hasText('template block text');
   });
 });

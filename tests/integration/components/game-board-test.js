@@ -13,14 +13,5 @@ module('Integration | Component | game-board', function (hooks) {
     await render(hbs`<GameBoard />`);
 
     assert.dom(this.element).hasText('');
-
-    // Template block usage:
-    await render(hbs`
-      <GameBoard>
-        template block text
-      </GameBoard>
-    `);
-
-    assert.dom(this.element).hasText('template block text');
   });
 });

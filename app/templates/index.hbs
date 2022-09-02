@@ -2,7 +2,7 @@
   <h1 class="text-center">Tanky</h1>
   {{#unless this.gameStarted}}
     <div class="text-center">
-      <button type="button" {{action this.actionGameStart}}>Start Game</button>
+      <button type="button" {{on "click" this.actionGameStart}}>Start Game</button>
     </div>
   {{/unless}}
   <div class="pad-top flex play-area">
@@ -27,7 +27,7 @@
 </div>
 
 {{#if this.isEnterPlayerInfo}}
-  <ModalDialog @onClose={{action this.cancelPlayerCreation}} @targetAttachment="center" @translucentOverlay={{true}}>
+  <ModalDialog @onClose={{this.cancelPlayerCreation}} @targetAttachment="center" @translucentOverlay={{true}}>
     <div>
       <label for="input-name">{{this.playerNameLabel}}</label>
       <Input
@@ -36,8 +36,8 @@
         @value={{this.playerName}}
         {{on "input" this.updateName}}
       />
-      <button type="button" disabled={{this.saveNameDisabled}} {{action this.actionConfirmName}}>Confirm</button>
-      <button type="button" {{action this.actionAutoName}}>Auto-Gen Names</button>
+      <button type="button" disabled={{this.saveNameDisabled}} {{on "click" this.actionConfirmName}}>Confirm</button>
+      <button type="button" {{on "click" this.actionAutoName}}>Auto-Gen Names</button>
     </div>
   </ModalDialog>
 {{/if}}

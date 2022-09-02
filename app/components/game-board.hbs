@@ -1,26 +1,30 @@
 <div class="board-grid" ...attributes>
   <table>
-    {{#each this.grid as |row rowI|}}
-      <tr>
-        {{#each row as |cell cellI|}}
-          <td class={{class-list "cell" (if cell.canUse "_selectable")}} {{action this.cellActionClick rowI cellI}}></td>
-        {{/each}}
-      </tr>
-    {{/each}}
+    <tbody>
+      {{#each this.grid as |row rowI|}}
+        <tr>
+          {{#each row as |cell cellI|}}
+            <td role="button" class={{class-list "cell" (if cell.canUse "_selectable")}} {{on "click" (fn this.cellActionClick rowI cellI)}}></td>
+          {{/each}}
+        </tr>
+      {{/each}}
+    </tbody>
   </table>
   <div class="tank-grid click-through">
     {{#each this.units as |tank|}}
       {{#if tank.isAssignedLocation}}
         <div
+          role="button"
           class={{class-list "tank-unit click-able" tank.player.type (if (is-equal tank this.unitSelected) "_selected")}}
-          style="transform: translate({{tank.xLocation}}%, {{tank.yLocation}}%)"
-          {{action this.tankActionClick tank}}
+          {{!-- allowed when `allowDynamicStyles` is enabled  --}}
+          style={{html-safe (concat "transform: translate(" tank.xLocation "%, " tank.yLocation "%)")}}
+          {{on "click" (fn this.tankActionClick tank)}}
         >
-          <img src="/images/tank.png" alt="Tank" class={{class-list "tank-image" tank.player.type}}>
-          <span class={{class-list "strength-display" tank.player.type}}>{{tank.strength}}</span>
+          <img role="presentation" src="/images/tank.png" alt="" class={{class-list "tank-image" tank.player.type}}>
+          <span role="presentation" class={{class-list "strength-display" tank.player.type}}>{{tank.strength}}</span>
         </div>
       {{/if}}
     {{/each}}
   </div>
-  <button type="button" disabled={{this.actionButtonDisabled}} {{action this.actionButtonClick}}>{{this.actionButtonText}}</button>
+  <button type="button" disabled={{this.actionButtonDisabled}} {{on "click" this.actionButtonClick}}>{{this.actionButtonText}}</button>
 </div>
