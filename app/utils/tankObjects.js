@@ -28,8 +28,14 @@ export class Tank {
   }
 
   get validCoordinates () {
-    const { isAssignedLocation, hasX, hasY } = this;
-    return isAssignedLocation && (10 > this.position?.pos1 && this.position?.pos1 >= 0) && (10 > this.position?.pos2 && this.position?.pos2 >= 0);
+    const { isAssignedLocation } = this;
+    return (
+      isAssignedLocation &&
+      10 > this.position?.pos1 &&
+      this.position?.pos1 >= 0 &&
+      10 > this.position?.pos2 &&
+      this.position?.pos2 >= 0
+    );
   }
 
   get xLocation() {
@@ -50,9 +56,9 @@ export class Tank {
     return position?.pos2 * 100;
   }
   get tilesMovedCount() {
-    const { turnPositions } = this
+    const { turnPositions } = this;
     if (!turnPositions) {
-      return;
+      return undefined;
     }
 
     return turnPositions.length - 1;
@@ -75,6 +81,6 @@ export class Player {
     if (!units) {
       return 0;
     }
-    return units.reduce((partialSum, a) => partialSum + a.tilesMovedCount, 0)
+    return units.reduce((partialSum, a) => partialSum + a.tilesMovedCount, 0);
   }
 }

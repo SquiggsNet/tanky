@@ -1,12 +1,14 @@
 <div class="board-grid" ...attributes>
   <table>
-    {{#each this.grid as |row rowI|}}
-      <tr>
-        {{#each row as |cell cellI|}}
-          <td class={{class-list "cell" (if cell.canUse "_selectable")}} {{action this.cellActionClick rowI cellI}}></td>
-        {{/each}}
-      </tr>
-    {{/each}}
+    <tbody>
+      {{#each this.grid as |row rowI|}}
+        <tr>
+          {{#each row as |cell cellI|}}
+            <td class={{class-list "cell" (if cell.canUse "_selectable")}} {{on "click" this.cellActionClick rowI cellI}}></td>
+          {{/each}}
+        </tr>
+      {{/each}}
+    </tbody>
   </table>
   <div class="tank-grid click-through">
     {{#each this.units as |tank|}}
@@ -14,7 +16,7 @@
         <div
           class={{class-list "tank-unit click-able" tank.player.type (if (is-equal tank this.unitSelected) "_selected")}}
           style="transform: translate({{tank.xLocation}}%, {{tank.yLocation}}%)"
-          {{action this.tankActionClick tank}}
+          {{on "click" this.tankActionClick tank}}
         >
           <img src="/images/tank.png" alt="Tank" class={{class-list "tank-image" tank.player.type}}>
           <span class={{class-list "strength-display" tank.player.type}}>{{tank.strength}}</span>
@@ -22,5 +24,5 @@
       {{/if}}
     {{/each}}
   </div>
-  <button type="button" disabled={{this.actionButtonDisabled}} {{action this.actionButtonClick}}>{{this.actionButtonText}}</button>
+  <button type="button" disabled={{this.actionButtonDisabled}} {{on "click" this.actionButtonClick}}>{{this.actionButtonText}}</button>
 </div>
