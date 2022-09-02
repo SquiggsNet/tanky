@@ -20,7 +20,7 @@
           style={{html-safe (concat "transform: translate(" tank.xLocation "%, " tank.yLocation "%)")}}
           {{on "click" (fn this.tankActionClick tank)}}
         >
-          <img role="presentation" src="/images/tank.png" class={{class-list "tank-image" tank.player.type}}>
+          <img role="presentation" src="/images/tank.png" alt="" class={{class-list "tank-image" tank.player.type}}>
           <span role="presentation" class={{class-list "strength-display" tank.player.type}}>{{tank.strength}}</span>
         </div>
       {{/if}}
