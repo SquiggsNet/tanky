@@ -3,6 +3,8 @@ import { tracked } from '@glimmer/tracking';
 
 class Cell {
   @tracked canUse = false;
+  @tracked playerOneShot = false;
+  @tracked playerTwoShot = false;
   @tracked position;
 
   constructor({ canUse, pos1, pos2 }) {

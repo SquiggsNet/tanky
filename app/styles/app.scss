@@ -20,6 +20,12 @@ html {
   &._selectable {
     background-color: transparentize($color: green, $amount: 0.6);
   }
+  .crosshairs {
+    display: block;
+    height: 75%;
+    width: 75%;
+    margin: auto;
+  }
 }
 .tank-grid {
   position: absolute;

@@ -12,6 +12,8 @@ export default class GameBoardComponent extends Component {
       return 'Confirm Tank Placement';
     } else if (gameState === 'first-round-movement') {
       return 'Confirm Tank Movement';
+    } else if (gameState === 'fire-placement-round') {
+      return 'Confirm Shots Fired';
     }
     return '';
   }
@@ -33,13 +35,14 @@ export default class GameBoardComponent extends Component {
           validTiles = [...grid[grid.length - 1]];
         }
       } else if (gameState === 'first-round-movement') {
+        const hasMovesRemaining = !!(3 - unitSelected.tilesMovedCount) && unitSelected.player.totalTurnMoves < 6;
         const down = tiles.find(
           (t) =>
             t.position.pos1 === unitSelected.position.pos1 &&
             t.position.pos2 === unitSelected.position.pos2 + 1
         );
         if (down) {
-          const canDown = unitSelected?.player?.type === 'p1' ||
+          const canDown = (unitSelected?.player?.type === 'p1' && hasMovesRemaining) ||
           (unitSelected?.player?.type === 'p2' && down.position === unitSelected.turnPositions[unitSelected.turnPositions.length - 2]);
           if (canDown) {
             validTiles.push(down);
@@ -51,7 +54,7 @@ export default class GameBoardComponent extends Component {
             t.position.pos2 === unitSelected.position.pos2 - 1
         );
         if (up) {
-          const canUp = unitSelected?.player?.type === 'p2' ||
+          const canUp = (unitSelected?.player?.type === 'p2' && hasMovesRemaining) ||
           (unitSelected?.player?.type === 'p1' && up.position === unitSelected.turnPositions[unitSelected.turnPositions.length - 2]);
           if (canUp) {
             validTiles.push(up);
@@ -63,7 +66,10 @@ export default class GameBoardComponent extends Component {
             t.position.pos2 === unitSelected.position.pos2
         );
         if (right) {
-          validTiles.push(right);
+          const canRight = hasMovesRemaining || right.position === unitSelected.turnPositions[unitSelected.turnPositions.length - 2]
+          if (canRight) {
+            validTiles.push(right);
+          }
         }
         const left = tiles.find(
           (t) =>
@@ -71,9 +77,14 @@ export default class GameBoardComponent extends Component {
             t.position.pos2 === unitSelected.position.pos2
         );
         if (left) {
-          validTiles.push(left);
+          const canLeft = hasMovesRemaining || left.position === unitSelected.turnPositions[unitSelected.turnPositions.length - 2]
+          if (canLeft) {
+            validTiles.push(left);
+          }
         }
       }
+    } else if (gameState === 'fire-placement-round') {
+      validTiles = this.playerOne?.shotPositions?.length >= 6 ? [] : tiles;
     }
 
     validTiles = validTiles.filter(
@@ -87,11 +98,45 @@ export default class GameBoardComponent extends Component {
       tile.canUse = false;
     }
 
+    let shotTiles = [];
+    const { playerOne, playerTwo } = this;
+    if (playerOne?.shotPositions) {
+      for (const pos of playerOne?.shotPositions) {
+        const tile = tiles.find((t) => t.position === pos);
+        if (tile) {
+          shotTiles.push(tile)
+          tile.playerOneShot = true;
+        }
+      }
+    }
+    let nonShotTiles = tiles.filter((tile) => !shotTiles.includes(tile));
+    nonShotTiles.map((t) => t.playerOneShot = false);
+    shotTiles = [];
+    if (playerTwo?.shotPositions) {
+      for (const pos of playerTwo?.shotPositions) {
+        const tile = tiles.find((t) => t.position === pos);
+        if (tile) {
+          shotTiles.push(tile)
+          tile.playerTwoShot = true;
+        }
+      }
+    }
+    nonShotTiles = tiles.filter((tile) => !shotTiles.includes(tile));
+    nonShotTiles.map((t) => t.playerTwoShot = false);
+
     return grid;
   }
 
+  get playerOne() {
+    return this.args.playerOne;
+  }
+
+  get playerTwo() {
+    return this.args.playerTwo;
+  }
+
   get units() {
-    const { playerOne, playerTwo } = this.args;
+    const { playerOne, playerTwo } = this;
     let units = [];
 
     if (playerOne?.units) {
@@ -109,13 +154,16 @@ export default class GameBoardComponent extends Component {
   }
 
   get actionButtonDisabled() {
-    const { units, gameState } = this;
+    const { units, gameState, playerOne, playerTwo } = this;
     let isDisabled = true;
     if (units.length) {
       if (gameState === 'enter-player-tanks') {
         isDisabled = !units.every((unit) => unit.validCoordinates);
       } else if (gameState === 'first-round-movement') {
-        isDisabled = true;
+        isDisabled = !playerOne.isTankMovementComplete || !playerTwo.isTankMovementComplete;
+      } else if (gameState === 'fire-placement-round') {
+        // Insert shot count
+        // isDisabled = !playerOne.isTankMovementComplete || !playerTwo.isTankMovementComplete;
       }
     }
 
