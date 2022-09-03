@@ -105,10 +105,14 @@ export default class IndexController extends Controller {
 
   @action
   tankActionClick(tank) {
-    if (this.tankSelected === tank) {
-      this.tankSelected = undefined;
-    } else {
-      this.tankSelected = tank;
+    const { gameState } = this;
+    const canTankUpdate = gameState === 'enter-player-tanks' || gameState === 'first-round-movement';
+    if (canTankUpdate) {      
+      if (this.tankSelected === tank) {
+        this.tankSelected = undefined;
+      } else {
+        this.tankSelected = tank;
+      }
     }
   }
 
@@ -118,13 +122,12 @@ export default class IndexController extends Controller {
     if (!gameState || !grid) {
       return;
     }
-
-    const updateMovements = this.gameState === 'first-round-movement';
-    const canTankUpdate =
-      this.gameState === 'enter-player-tanks' || updateMovements;
-
+    
+    const cell = grid[rowIndex][cellIndex];
+        
+    const updateMovements = gameState === 'first-round-movement';
+    const canTankUpdate = gameState === 'enter-player-tanks' || updateMovements;
     if (tankSelected && canTankUpdate) {
-      const cell = grid[rowIndex][cellIndex];
       if (cell?.canUse) {
         tankSelected.position = cell.position;
         if (updateMovements) {
@@ -136,12 +139,31 @@ export default class IndexController extends Controller {
         }
       }
     }
+
+    if (gameState === 'fire-placement-round') {
+
+      if (this.playerOne.shotPositions.includes(cell.position)) {
+        const index = this.playerOne.shotPositions.indexOf(cell.position);
+        if (index > -1) {
+          const shots = [...this.playerOne.shotPositions];
+          shots.splice(index, 1);
+          this.playerOne.shotPositions = shots;
+        }
+      } else {
+        this.playerOne.shotPositions.pushObject(cell.position);
+      }
+    }
   }
 
   @action
   actionButtonClick() {
+    const { gameState } = this;
+    if (gameState === 'enter-player-tanks') {
+      this.gameState = 'first-round-movement';
+    } else if (gameState === 'first-round-movement') {
+      this.gameState = 'fire-placement-round';
+    }
     this.tankSelected = undefined;
-    this.gameState = 'first-round-movement';
     this.updateTurnStartPosition();
   }
 
@@ -159,6 +181,7 @@ export default class IndexController extends Controller {
     }
 
     for (const unit of units) {
+      unit.turnPositions = []
       unit.turnPositions.pushObject(unit.position);
     }
   }

@@ -55,6 +55,17 @@ export class Tank {
 
     return position?.pos2 * 100;
   }
+
+  get hasForwardMovement() {
+    const { turnPositions } = this;
+    if (!turnPositions) {
+      return undefined;
+    }
+    const yPositions = turnPositions.map((t) => t.pos2);
+    const uniqueYPositions = yPositions.filter((v, i, a) => a.indexOf(v) === i)
+    return uniqueYPositions.length > 1;
+  }
+
   get tilesMovedCount() {
     const { turnPositions } = this;
     if (!turnPositions) {
@@ -69,6 +80,7 @@ export class Player {
   @tracked name;
   @tracked type;
   @tracked units;
+  @tracked shotPositions = [];
 
   constructor({ name, type, units }) {
     this.name = name;
@@ -82,5 +94,18 @@ export class Player {
       return 0;
     }
     return units.reduce((partialSum, a) => partialSum + a.tilesMovedCount, 0);
+  }
+
+  get hasForwardMovement() {
+    const { units } = this;
+    if (!units) {
+      return false;
+    }
+    return units.some((u) => u.hasForwardMovement);
+  }
+
+  get isTankMovementComplete() {
+    const { totalTurnMoves, hasForwardMovement } = this;
+    return totalTurnMoves === 6 && hasForwardMovement;
   }
 }

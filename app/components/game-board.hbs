@@ -4,7 +4,15 @@
       {{#each this.grid as |row rowI|}}
         <tr>
           {{#each row as |cell cellI|}}
-            <td role="button" class={{class-list "cell" (if cell.canUse "_selectable")}} {{on "click" (fn this.cellActionClick rowI cellI)}}></td>
+            <td
+              role="button"
+              class={{class-list "cell" (if cell.canUse "_selectable")}}
+              {{on "click" (fn this.cellActionClick rowI cellI)}}
+            >
+              {{#if cell.playerOneShot}}
+                <img role="presentation" src="/images/crosshairs-red.svg" alt="" class="crosshairs">
+              {{/if}}
+            </td>
           {{/each}}
         </tr>
       {{/each}}
