@@ -34,5 +34,8 @@
       {{/if}}
     {{/each}}
   </div>
-  <button type="button" disabled={{this.actionButtonDisabled}} {{on "click" this.actionButtonClick}}>{{this.actionButtonText}}</button>
+  <div class="flex space-between">
+    <button type="button" disabled={{this.actionButtonDisabled}} {{on "click" this.actionButtonClick}}>{{this.actionButtonText}}</button>
+    <button type="button" {{on "click" this.autoActionButtonClick}}>{{this.autoActionButtonText}}</button>
+  </div>
 </div>
