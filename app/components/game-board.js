@@ -18,6 +18,18 @@ export default class GameBoardComponent extends Component {
     return '';
   }
 
+  get autoActionButtonText() {
+    const { gameState } = this;
+    if (gameState === 'enter-player-tanks') {
+      return 'Auto Tank Placement';
+    } else if (gameState === 'first-round-movement') {
+      return 'Auto Tank Movement';
+    } else if (gameState === 'fire-placement-round') {
+      return 'Auto Shots Fired';
+    }
+    return '';
+  }
+
   get grid() {
     const { args, unitSelected, units, gameState } = this;
 
@@ -194,6 +206,15 @@ export default class GameBoardComponent extends Component {
 
     if ('function' === typeof actionButtonClick) {
       actionButtonClick();
+    }
+  }
+
+  @action
+  autoActionButtonClick() {
+    const { autoActionButtonClick } = this.args;
+
+    if ('function' === typeof autoActionButtonClick) {
+      autoActionButtonClick();
     }
   }
 }

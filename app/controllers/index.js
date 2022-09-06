@@ -166,7 +166,7 @@ export default class IndexController extends Controller {
     this.tankSelected = undefined;
     this.updateTurnStartPosition();
   }
-
+  
   @action
   updateTurnStartPosition() {
     const { playerOne, playerTwo } = this;
@@ -185,12 +185,45 @@ export default class IndexController extends Controller {
       unit.turnPositions.pushObject(unit.position);
     }
   }
-
+  
   @action
   actionAutoName() {
     this.playerName = 'Mecloving';
     this.actionConfirmName();
     this.playerName = 'Squiggs';
     this.actionConfirmName();
+  }
+
+  @action
+  autoActionButtonClick() {
+    const { gameState, playerOne, playerTwo, grid } = this;
+    if (gameState === 'enter-player-tanks') {
+      for (const [i, unit] of playerOne?.units?.entries()) {
+        const cell = grid[0][i];
+        unit.position = cell.position;
+      }
+      for (const [i, unit] of playerTwo?.units?.entries()) {
+        const cell = grid[9][i];
+        unit.position = cell.position;
+      }
+      this.actionButtonClick();
+    } else if (gameState === 'first-round-movement') {
+      playerOne.units[1].position = grid[1][1].position;
+      playerOne.units[2].position = grid[2][2].position;
+      playerOne.units[3].position = grid[1][3].position;
+      playerTwo.units[1].position = grid[8][1].position;
+      playerTwo.units[2].position = grid[7][2].position;
+      playerTwo.units[3].position = grid[8][3].position;
+      this.actionButtonClick();
+    } else if (gameState === 'fire-placement-round') {
+      this.playerOne.shotPositions.pushObject(grid[7][1].position);
+      this.playerOne.shotPositions.pushObject(grid[6][1].position);
+      this.playerOne.shotPositions.pushObject(grid[6][2].position);
+      this.playerOne.shotPositions.pushObject(grid[5][2].position);
+      this.playerOne.shotPositions.pushObject(grid[7][3].position);
+      this.playerOne.shotPositions.pushObject(grid[6][3].position);
+    }
+    this.tankSelected = undefined;
+    this.updateTurnStartPosition();
   }
 }
